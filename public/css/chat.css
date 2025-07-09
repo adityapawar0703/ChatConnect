@@ -1,0 +1,24 @@
+:root {
+  --bg-color: #f4f7fa;
+  --text-color: #333;
+  --card-color: #ffffff;
+  --primary-color: #4a90e2;
+  --accent-color: #6df966;
+  --error-color: #ff5050;
+}
+
+body[data-theme='dark'] {
+  --bg-color: #1e1e1e;
+  --text-color: #f1f1f1;
+  --card-color: #2c2c2c;
+  --primary-color: #7aa2f7;
+  --accent-color: #6df966;
+  --error-color: #ff4e4e;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+  font-family: 'Segoe UI', sans-serif;
+}

@@ -1,0 +1,83 @@
+<header class="navbar2">
+  <div class="navbar2-left">
+    <img src="https://i.pravatar.cc/32?img=15" alt="Guest" class="avatar" />
+    <span class="guest-label">Guest</span>
+  </div>
+  <div class="navbar2-right">
+    <button id="video-call-btn" class="video-call-button">
+      📞 Start Video Call
+    </button>
+  </div>
+</header>
+<style>
+    .navbar2 {
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color:rgba(231, 216, 216, 0.08);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.navbar2-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.guest-label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.navbar2-right .video-call-button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar2-right .video-call-button:hover {
+  filter: brightness(0.9);
+}
+
+</style>
+<style>
+:root {
+  --bg-color: #f4f7fa;
+  --text-color: #333;
+  --card-color: #ffffff;
+  --primary-color: #4a90e2;
+  --accent-color: #6df966;
+  --error-color: #ff5050;
+}
+
+body[data-theme='dark'] {
+  --bg-color: #1e1e1e;
+  --text-color: #f1f1f1;
+  --card-color: #2c2c2c;
+  --primary-color: #7aa2f7;
+  --accent-color: #6df966;
+  --error-color: #ff4e4e;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+  font-family: 'Segoe UI', sans-serif;
+}
+</style>

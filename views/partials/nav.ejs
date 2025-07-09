@@ -1,0 +1,121 @@
+ <nav>
+    <div class="logo">ChatConnect</div>
+    <div class="hamburger" id="hamburger">☰</div>
+    <div class="nav-links" id="navLinks">
+        <div class="nav-item">
+            <a href="#">Home</a>
+            <div class="tooltip">Go to homepage</div>
+        </div>
+        <div class="nav-item">
+            <a href="#">About</a>
+            <div class="tooltip">Learn more about us</div>
+        </div>
+        <div class="nav-item">
+            <a href="https://github.com/adityapawar0703" target="_blank">GitHub</a>
+            <div class="tooltip">GitHub source — Aditya Pawar</div>
+        </div>
+        <div class="nav-item">
+            <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            <div class="tooltip">Connect with the developer</div>
+        </div>
+        <div class="nav-item">
+            <a href="#">Contact</a>
+            <!-- <div class="tooltip"></div> -->
+        </div>
+    
+        <div class="theme-toggle" id="themeToggle">
+            <div class="toggle-slider">
+                <div class="dot"></div>
+            </div>
+        </div>
+        <style>
+            :root {
+                --bg-color: #f4f7fa;
+                --text-color: #333;
+                --card-color: #ffffff;
+                --primary-color: #4a90e2;
+            }
+    
+            body[data-theme='dark'] {
+                --bg-color: #1e1e1e;
+                --text-color: #f1f1f1;
+                --card-color: #2c2c2c;
+                --primary-color: #7aa2f7;
+            }
+    
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+            }
+    
+            /* Apply variables */
+            nav,
+            .form-section {
+                background-color: var(--card-color);
+            }
+    
+            .nav-item a,
+            .logo,
+            .tooltip {
+                color: var(--text-color);
+            }
+    
+            button {
+                background-color: var(--primary-color);
+            }
+    
+            /* Toggle Switch */
+            .theme-toggle {
+                cursor: pointer;
+                margin-left: 1rem;
+            }
+    
+            .toggle-slider {
+                width: 50px;
+                height: 24px;
+                background-color: var(--primary-color);
+                border-radius: 30px;
+                position: relative;
+                transition: background-color 0.3s ease;
+            }
+    
+            .toggle-slider .dot {
+                width: 20px;
+                height: 20px;
+                background: #fff;
+                border-radius: 50%;
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                transition: left 0.3s ease, transform 0.3s ease;
+            }
+    
+            /* Dark Mode Activated */
+            body[data-theme='dark'] .toggle-slider .dot {
+                left: 28px;
+                transform: rotate(180deg);
+            }
+        </style>
+        <script>
+          document.getElementById('themeToggle').addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+});
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const nav = document.getElementById('navLinks');
+                const hamburger = document.getElementById('hamburger');
+                const toggle = document.getElementById('themeToggle');
+
+                hamburger.addEventListener('click', function () {
+                    nav.classList.toggle('show');
+                });
+
+                toggle.addEventListener('click', function () {
+                    const currentTheme = document.body.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.body.setAttribute('data-theme', newTheme);
+                });
+            });
+        </script>
+    </div>
+  </nav>
