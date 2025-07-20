@@ -13,4 +13,8 @@ router.get("/chat", function (req, res) {
   res.render("chat");
 });
 
+router.get("/error",function(req,res){
+  res.render("error");
+})
+
 module.exports = router;

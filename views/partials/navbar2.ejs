@@ -3,9 +3,30 @@
     <img src="https://i.pravatar.cc/32?img=15" alt="Guest" class="avatar" />
     <span class="guest-label">Guest</span>
   </div>
-  <div class="navbar2-right">
-    <button id="video-call-btn" class="video-call-button">
-      📞 Start Video Call
+
+    <div id="languageSelectorDiv" class="language-selector">
+      Choose Language:
+      
+  <select id="languageSelect" class="language-select px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+  </select>
+</div>
+  <div class="navbar2-right flex items-center p-1 bg-red-600">
+    <button id="video-call-btn" class="video-call-button flex items-center">
+       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24" style="margin-right: 8px;">
+    <path d="M6.62 10.79a15.91 15.91 0 006.59 6.59l2.2-2.2a1 1 0 011.06-.24 12.25 12.25 0 003.84.61 1 1 0 011 1v3.56a1 1 0 01-1 1A17.92 17.92 0 012 4a1 1 0 011-1h3.55a1 1 0 011 1 12.25 12.25 0 00.61 3.84 1 1 0 01-.24 1.06l-2.3 2.29z"/>
+  </svg>
+       Start Audio Call
+    </button>
+
+    <button id="audio-call-btn" class="video-call-button flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24" style="margin-right: 8px;">
+    <path d="M17 10.5V6c0-1.1-.9-2-2-2H3C1.9 4 1 4.9 1 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4.5l5 5v-13l-5 5z"/>
+  </svg>
+       Start Video Call
     </button>
   </div>
 </header>
