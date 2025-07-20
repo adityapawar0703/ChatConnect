@@ -88,7 +88,7 @@
 </head>
 
 <body class="flex flex-col h-dvh ">
-     <nav>
+     <nav id="navbarMain">
     <div class="logo">ChatConnect</div>
     <div class="hamburger" id="hamburger">☰</div>
     <div class="nav-links" id="navLinks">
@@ -143,6 +143,10 @@
             .form-section {
                 background-color: var(--card-color);
             }
+            /* #navbarMain {
+                background-color: var(--card-color);
+                color: var(--text-color);
+            } */
     
             .nav-item a,
             .logo,
@@ -193,6 +197,10 @@
 
             document.addEventListener("DOMContentLoaded", function () {
                 const nav = document.getElementById('navLinks');
+                // trial of navbar check 1
+              const navbarMain = document.getElementById('navbarMain');
+              const navBarLinks = document.querySelectorAll('nav-item');
+
                 const hamburger = document.getElementById('hamburger');
                 const toggle = document.getElementById('themeToggle');
              const    chatformColor = document.querySelector("#chatform");
@@ -208,9 +216,15 @@
                     if(newTheme=='dark'){
                         chatformColor.style.backgroundColor = '#2c2c2c';
                         chatformColor.style.color = '#f1f1f1';
+                        // navbarMain.style.backgroundColor = '#2c2c2c';
+                        // navBarLinks.style.color = 'white';
+                       
+                     
                     }else{
                         chatformColor.style.backgroundColor = '#ffffff';
                         chatformColor.style.color = '#333';
+                        navbarMain.style.backgroundColor = '#ffffff';
+                        navbarMain.style.color = '#333';
                     }
 
                 });
@@ -234,6 +248,7 @@
       align-items: center;
       padding: 1rem 2rem;
       background-color: #ffffff;
+      /* background-color: rgb(26, 23, 23); */
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
       position: relative;
       z-index: 1000;
