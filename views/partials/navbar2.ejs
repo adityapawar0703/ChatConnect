@@ -8,12 +8,21 @@
       Choose Language:
       
   <select id="languageSelect" class="language-select px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-    <option value="en">English</option>
-    <option value="hi">Hindi</option>
-    <option value="es">Español</option>
-    <option value="fr">Français</option>
-    <option value="de">Deutsch</option>
+    <option value="English">English</option>
+    <option value="Hindi">Hindi</option>
+    <option value="Russian">Russian</option>
+    <option value="German">German</option>
+    <option value="Japanese">Japanese</option>
+    <option value="Chinese">Chinese</option>
+
+   
   </select>
+  <script>
+    document.getElementById("languageSelect").addEventListener("change", (e) => {
+    localStorage.setItem("preferredLang", e.target.value);
+});
+
+  </script>
 </div>
   <div class="navbar2-right flex items-center p-1 bg-red-600">
     <button id="video-call-btn" class="video-call-button flex items-center">

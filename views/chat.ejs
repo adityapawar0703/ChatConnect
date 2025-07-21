@@ -83,6 +83,7 @@
         }
     </style>
     <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/test.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
@@ -467,7 +468,7 @@
                 <button id="reject-call" class="bg-red-500 text-white py-2 px-4 rounded-md ml-2">Reject</button>
             </div>
         </div>
-        <main class="flex-1 p-4 overflow-y-auto relative" id="message-container">
+        <main class="flex-1 p-4 overflow-y-auto relative space-y-2" id="message-container">
             <div
                 class="text-zinc-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 text-center nobody">
                 Welcome to the chat room!<br>
@@ -488,7 +489,7 @@
         <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"
             integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO"
             crossorigin="anonymous"></script>
-
+         
         <script>
             const socket = io();
             const chatform = document.querySelector("#chatform");
@@ -509,10 +510,32 @@
                 room = roomname;
                 document.querySelector(".nobody").classList.add("hidden");
             })
+    
+            // socket.on("message", function (message) {
+            //     receiveMessage(message);
+            // })
+                //   below is trail for translation and  this is original code the above code is commented
+            // trial for translation from here
 
-            socket.on("message", function (message) {
-                receiveMessage(message);
-            })
+            socket.on("message", async function (msg) {
+    const userLang = localStorage.getItem("preferredLang") || "English"; 
+
+                try {
+                    const translated = await translateMessage(msg, userLang);
+
+                    if (translated.trim().toLowerCase() === msg.trim().toLowerCase()) {
+                        receiveMessage(msg);  // Same language, show original
+                    } else {
+                        receiveTranslatedMessage(msg, translated);  // Show both
+                    }
+                } catch (e) {
+                    console.error("Translation failed:", e);
+                    receiveMessage(msg); // fallback
+                }
+            });
+
+            // trial for translation from here
+
 
             chatform.addEventListener("submit", function (event) {
                 event.preventDefault();
@@ -557,7 +580,75 @@
                 document.getElementById('message-container').appendChild(messageContainer);
                 document.querySelector("#message-container").scrollTop = document.querySelector("#message-container").scrollHeight;
             }
+            //  this is trial for translation 
+          function receiveTranslatedMessage(original, translated) {
+                const container = document.getElementById("message-container");
 
+                // Create a wrapper div with limited width and alignment
+                const messageWrapper = document.createElement("div");
+                messageWrapper.style.display = "flex";
+                messageWrapper.style.flexDirection = "column";
+                messageWrapper.style.alignItems = "flex-start";
+                messageWrapper.style.maxWidth = "75%";
+                messageWrapper.style.margin = "10px 0";
+
+                // Original message bubble
+                const originalBubble = document.createElement("div");
+                originalBubble.style.backgroundColor = "#d1d5db"; // Tailwind gray-300
+                originalBubble.style.color = "#1f2937"; // Tailwind gray-900
+                originalBubble.style.padding = "8px 12px";
+                originalBubble.style.borderRadius = "12px";
+                originalBubble.style.boxShadow = "0px 1px 3px rgba(0, 0, 0, 0.2)";
+                originalBubble.style.display = "inline-block";
+                originalBubble.style.wordBreak = "break-word";
+                originalBubble.style.maxWidth = "100%";
+                originalBubble.innerText = original;
+
+                // Translated message bubble
+                const translatedBubble = document.createElement("div");
+                translatedBubble.style.backgroundColor = "#dbeafe"; // Tailwind blue-100
+                translatedBubble.style.color = "#374151"; // Tailwind gray-700
+                translatedBubble.style.padding = "6px 10px";
+                translatedBubble.style.borderRadius = "10px";
+                translatedBubble.style.marginTop = "4px";
+                translatedBubble.style.boxShadow = "inset 0px 1px 2px rgba(0, 0, 0, 0.1)";
+                translatedBubble.style.fontSize = "0.9rem";
+                translatedBubble.style.fontStyle = "italic";
+                translatedBubble.style.display = "inline-block";
+                translatedBubble.style.wordBreak = "break-word";
+                translatedBubble.style.maxWidth = "100%";
+                translatedBubble.innerText = `Translated: ${translated}`;
+
+                // Add both bubbles
+                messageWrapper.appendChild(originalBubble);
+                messageWrapper.appendChild(translatedBubble);
+
+                // Add to container
+                container.appendChild(messageWrapper);
+                container.scrollTop = container.scrollHeight;
+            }
+
+
+             async function translateMessage(message, targetLang) {
+                    const response = await fetch("/translate", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            text: message,
+                            language: targetLang
+                        })
+                    });
+
+                    const data = await response.json();
+                    console.log("Line 620: Translation response:", data);
+                    return data.translation; // make sure this matches what backend sends
+                }
+
+
+
+            //  this is trial for translation 
             // WEBRTC START
             let localStream;
             let remoteStream;
