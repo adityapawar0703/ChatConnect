@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+require('dotenv').config();
+
 // const fetch = require('node-fetch'); 
 const indexRouter = require("./routes/index");
 const path = require("path");
