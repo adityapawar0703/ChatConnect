@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const axios = require('axios');
 
-const GEMINI_API_KEY = 'AIzaSyCxlWndumyoOFlvzrNRhhdQ9k72TAYEZNE';
+const GEMINI_API_KEY =process.env.GEMINI_API_KEY;
 
 router.get("/", function (req, res) {
   res.render("test");
