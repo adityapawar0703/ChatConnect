@@ -1,91 +1,53 @@
 <header class="navbar2">
-  <div class="navbar2-left">
-    <img src="https://i.pravatar.cc/32?img=15" alt="Guest" class="avatar" />
-    <span class="guest-label">Guest</span>
+  <div class="navbar2-section navbar2-left">
+    <div class="user-info">
+      <img src="<%= userImg %>" alt="<%= userName %>" class="avatar" />
+      <span class="guest-label"><%= userName %></span>
+    </div>
+
+    <span class="vs-text">vs</span>
+
+    <% if (opponentName && opponentImg) { %>
+      <div class="user-info opponent">
+        <img src="<%= opponentImg %>" alt="<%= opponentName %>" class="avatar" />
+        <span class="guest-label"><%= opponentName %></span>
+      </div>
+    <% } else { %>
+      <div class="user-info waiting">
+        <div class="waiting-circle">⏳</div>
+        <span class="guest-label">Waiting for user...</span>
+      </div>
+    <% } %>
   </div>
 
-    <div id="languageSelectorDiv" class="language-selector">
-      Choose Language:
-      
-  <select id="languageSelect" class="language-select px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-    <option value="English">English</option>
-    <option value="Hindi">Hindi</option>
-    <option value="Russian">Russian</option>
-    <option value="German">German</option>
-    <option value="Japanese">Japanese</option>
-    <option value="Chinese">Chinese</option>
+  <div class="navbar2-section language-selector">
+    <label for="languageSelect" class="language-label">Language:</label>
+    <select id="languageSelect" class="language-select">
+      <option value="English">English</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Russian">Russian</option>
+      <option value="German">German</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Chinese">Chinese</option>
+    </select>
+  </div>
 
-   
-  </select>
-  <script>
-    document.getElementById("languageSelect").addEventListener("change", (e) => {
-    localStorage.setItem("preferredLang", e.target.value);
-});
-
-  </script>
-</div>
-  <div class="navbar2-right flex items-center p-1 bg-red-600">
-    <button id="video-call-btn" class="video-call-button flex items-center">
-       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24" style="margin-right: 8px;">
-    <path d="M6.62 10.79a15.91 15.91 0 006.59 6.59l2.2-2.2a1 1 0 011.06-.24 12.25 12.25 0 003.84.61 1 1 0 011 1v3.56a1 1 0 01-1 1A17.92 17.92 0 012 4a1 1 0 011-1h3.55a1 1 0 011 1 12.25 12.25 0 00.61 3.84 1 1 0 01-.24 1.06l-2.3 2.29z"/>
-  </svg>
-       Start Audio Call
-    </button>
-
-    <button id="audio-call-btn" class="video-call-button flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24" style="margin-right: 8px;">
-    <path d="M17 10.5V6c0-1.1-.9-2-2-2H3C1.9 4 1 4.9 1 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4.5l5 5v-13l-5 5z"/>
-  </svg>
-       Start Video Call
+  <div class="navbar2-section navbar2-right">
+    <button id="video-call-btn" class="video-call-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24">
+        <path d="M17 10.5V6c0-1.1-.9-2-2-2H3C1.9 4 1 4.9 1 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4.5l5 5v-13l-5 5z"/>
+      </svg>
+      <span class="button-text">Start Video Call</span>
     </button>
   </div>
 </header>
-<style>
-    .navbar2 {
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1.5rem;
-  background-color:rgba(231, 216, 216, 0.08);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
 
-.navbar2-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
+<script>
+  document.getElementById("languageSelect").addEventListener("change", (e) => {
+    localStorage.setItem("preferredLang", e.target.value);
+  });
+</script>
 
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.guest-label {
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.navbar2-right .video-call-button {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.navbar2-right .video-call-button:hover {
-  filter: brightness(0.9);
-}
-
-</style>
 <style>
 :root {
   --bg-color: #f4f7fa;
@@ -110,5 +72,109 @@ body {
   color: var(--text-color);
   transition: background 0.3s, color 0.3s;
   font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar2 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: rgba(231, 216, 216, 0.08);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 1rem;
+}
+
+.navbar2-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navbar2-left {
+  flex: 1;
+  min-width: 120px;
+}
+
+.navbar2-right {
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.guest-label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.language-selector {
+  flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.language-label {
+  font-weight: 500;
+}
+
+.language-select {
+  padding: 0.4rem 0.8rem;
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 120px;
+}
+
+.video-call-button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.video-call-button:hover {
+  filter: brightness(0.95);
+}
+
+/* Hide button text on small screens */
+
+
+/* Stack sections vertically on smaller screens */
+@media (max-width: 768px) {
+  .navbar2 {
+    flex-direction: column;
+    align-items: center;
+  }
+  .navbar2-left{
+    padding-left: 20px;
+    text-align: center;
+  }
+  .language-selector{
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .navbar2-section {
+    width: 100%;
+   
+  }
+
+  .navbar2-right {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>

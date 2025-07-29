@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const axios = require('axios');
-
+const path = require("path");
+const {chatPageController} =  require("../controllers/chatController");
 const GEMINI_API_KEY =process.env.GEMINI_API_KEY;
 
 router.get("/", function (req, res) {
@@ -12,9 +13,11 @@ router.get("/test",function(req,res){
   res.render("test");
 })
 
-router.get("/chat", function (req, res) {
-  res.render("chat");
-});
+// router.get("/chat", function (req, res) {
+//   res.render("chat");
+// });
+router.get("/chat", chatPageController);
+
 
 router.get("/error",function(req,res){
   res.render("error");
