@@ -97,25 +97,56 @@
             }
         </style>
         <script>
-          document.getElementById('themeToggle').addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-});
+  document.addEventListener("DOMContentLoaded", function () {
+    const nav = document.getElementById('navLinks');
+    const hamburger = document.getElementById('hamburger');
+    const toggle = document.getElementById('themeToggle');
 
-            document.addEventListener("DOMContentLoaded", function () {
-                const nav = document.getElementById('navLinks');
-                const hamburger = document.getElementById('hamburger');
-                const toggle = document.getElementById('themeToggle');
+   
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
 
-                hamburger.addEventListener('click', function () {
-                    nav.classList.toggle('show');
-                });
+    hamburger.addEventListener('click', function () {
+      nav.classList.toggle('show');
+    });
 
-                toggle.addEventListener('click', function () {
-                    const currentTheme = document.body.getAttribute('data-theme');
-                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                    document.body.setAttribute('data-theme', newTheme);
-                });
-            });
-        </script>
-    </div>
-  </nav>
+    toggle.addEventListener('click', function () {
+      const currentTheme = document.body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+  });
+</script>
+
+    </div>  </nav>
+
+    <!-- making a div for vertical navbar or menubar -->
+     <!-- <style>
+        
+     </style>
+     <div id="menubar" class="absolute top-0 height-[300px] w-[40%] bg-red text-black">
+        <div class="theme-toggle" id="themeToggle">
+            <div class="toggle-slider">
+                <div class="dot"></div>
+            </div>
+        </div>
+       <div class="flex flex-col gap-2 p-4 bg-yellow-200">
+        <a href="#">Home</a>
+       <a href="#">About us</a>
+       <a href="#">Contact</a>
+        <div class="navbar2-section language-selector">
+    <label for="languageSelect" class="language-label">Language:</label>
+    <select id="languageSelect" class="language-select">
+      <option value="English">English</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Russian">Russian</option>
+      <option value="German">German</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Chinese">Chinese</option>
+    </select>
+  </div>
+       </div>
+
+     </div> -->

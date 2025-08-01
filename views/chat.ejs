@@ -89,150 +89,7 @@
 </head>
 
 <body class="flex flex-col h-dvh ">
-     <nav id="navbarMain">
-    <div class="logo">ChatConnect</div>
-    <div class="hamburger" id="hamburger">☰</div>
-    <div class="nav-links" id="navLinks">
-        <div class="nav-item">
-            <a href="#">Home</a>
-            <div class="tooltip">Go to homepage</div>
-        </div>
-        <div class="nav-item">
-            <a href="#">About</a>
-            <div class="tooltip">Learn more about us</div>
-        </div>
-        <div class="nav-item">
-            <a href="https://github.com/adityapawar0703" target="_blank">GitHub</a>
-            <div class="tooltip">GitHub source — Aditya Pawar</div>
-        </div>
-        <div class="nav-item">
-            <a href="https://in.linkedin.com/in/aditya-pawar-b654b629a" target="_blank">LinkedIn</a>
-            <div class="tooltip">Connect with the developer</div>
-        </div>
-        <div class="nav-item">
-            <a href="#">Contact</a>
-            <!-- <div class="tooltip"></div> -->
-        </div>
-    
-        <div class="theme-toggle" id="themeToggle">
-            <div class="toggle-slider">
-                <div class="dot"></div>
-            </div>
-        </div>
-        <style>
-            :root {
-                --bg-color: #f4f7fa;
-                --text-color: #333;
-                --card-color: #ffffff;
-                --primary-color: #4a90e2;
-            }
-    
-            body[data-theme='dark'] {
-                --bg-color: #1e1e1e;
-                --text-color: #f1f1f1;
-                --card-color: #2c2c2c;
-                --primary-color: #7aa2f7;
-            }
-    
-            body {
-                background-color: var(--bg-color);
-                color: var(--text-color);
-            }
-    
-            /* Apply variables */
-            nav,
-            .form-section {
-                background-color: var(--card-color);
-            }
-            /* #navbarMain {
-                background-color: var(--card-color);
-                color: var(--text-color);
-            } */
-    
-            .nav-item a,
-            .logo,
-            .tooltip {
-                color: var(--text-color);
-            }
-    
-            button {
-                background-color: var(--primary-color);
-            }
-    
-            /* Toggle Switch */
-            .theme-toggle {
-                cursor: pointer;
-                margin-left: 1rem;
-            }
-    
-            .toggle-slider {
-                width: 50px;
-                height: 24px;
-                background-color: var(--primary-color);
-                border-radius: 30px;
-                position: relative;
-                transition: background-color 0.3s ease;
-            }
-    
-            .toggle-slider .dot {
-                width: 20px;
-                height: 20px;
-                background: #fff;
-                border-radius: 50%;
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                transition: left 0.3s ease, transform 0.3s ease;
-            }
-    
-            /* Dark Mode Activated */
-            body[data-theme='dark'] .toggle-slider .dot {
-                left: 28px;
-                transform: rotate(180deg);
-            }
-        </style>
-        <script>
-          document.getElementById('themeToggle').addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-});
-
-            document.addEventListener("DOMContentLoaded", function () {
-                const nav = document.getElementById('navLinks');
-                // trial of navbar check 1
-              const navbarMain = document.getElementById('navbarMain');
-              const navBarLinks = document.querySelectorAll('nav-item');
-
-                const hamburger = document.getElementById('hamburger');
-                const toggle = document.getElementById('themeToggle');
-             const    chatformColor = document.querySelector("#chatform");
-                hamburger.addEventListener('click', function () {
-                    nav.classList.toggle('show');
-                });
-
-                toggle.addEventListener('click', function () {
-                    const currentTheme = document.body.getAttribute('data-theme');
-                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-                    document.body.setAttribute('data-theme', newTheme);
-                    if(newTheme=='dark'){
-                        chatformColor.style.backgroundColor = '#2c2c2c';
-                        chatformColor.style.color = '#f1f1f1';
-                        // navbarMain.style.backgroundColor = '#2c2c2c';
-                        // navBarLinks.style.color = 'white';
-                       
-                     
-                    }else{
-                        chatformColor.style.backgroundColor = '#ffffff';
-                        chatformColor.style.color = '#333';
-                        navbarMain.style.backgroundColor = '#ffffff';
-                        navbarMain.style.color = '#333';
-                    }
-
-                });
-            });
-        </script>
-    </div>
-  </nav>
+     
   <style>
     body {
       margin: 0;
@@ -243,77 +100,7 @@
     }
 
     /* Navbar */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #ffffff;
-      /* background-color: rgb(26, 23, 23); */
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      position: relative;
-      z-index: 1000;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #4a90e2;
-    }
-
-    .hamburger {
-      display: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: #4a90e2;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-    }
-
-    .nav-item {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .nav-item a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-
-    .nav-item a:hover {
-      color: #4a90e2;
-    }
-
-    .tooltip {
-      opacity: 0;
-      transform: translateY(10px);
-      background-color: #ffffff;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      font-size: 0.85rem;
-      white-space: nowrap;
-      pointer-events: none;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      position: absolute;
-      top: 2.5rem;
-      max-width: 200px;
-      text-align: center;
-      z-index: 10;
-    }
-
-    .nav-item:hover .tooltip {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
+   
     /* Hero Section */
     .hero {
       text-align: center;
@@ -428,6 +215,7 @@
     }
   </style>
    
+    <%- include('partials/nav') %> 
     <%- include('partials/navbar2') %> 
         <div class="fixed videoblock hidden z-[222] w-full h-svh">
             <div id="videos">
@@ -475,14 +263,32 @@
                 Start typing your messages below or click on the video call button to initiate a video call.
                </div>
         </main>
-        <form id="chatform" class="bg-white p-4 flex">
+        <!-- <form id="chatform" class="bg-white p-4 flex">
             <input type="hidden" id="userid" value="">
             <input type="text" id="messagebox"
                 class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Type a message">
             <button type="submit"
                 class="ml-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Send</button>
-        </form>
+        </form> -->
+      <!-- trial  above code is working fine , below code making theme consistent  -->
+        <form id="chatform" class="bg-white dark:bg-gray-800 p-4 flex">
+  <input type="hidden" id="userid" value="">
+  <input
+    type="text"
+    id="messagebox"
+    class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    placeholder="Type a message"
+  >
+  <button
+    type="submit"
+    class="ml-2 bg-indigo-600 dark:bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-600"
+  >
+    Send
+  </button>
+</form>
+
+
         <video id="local-video" class="hidden" autoplay></video>
         <video id="remote-video" class="hidden" autoplay></video>
 
@@ -504,12 +310,28 @@
 
 
 
-            socket.emit("joinroom");
+           const userName = <%- JSON.stringify(userName) %>;
+    const userImg = <%- JSON.stringify(userImg) %>;
 
-            socket.on("joined", function (roomname) {
-                room = roomname;
-                document.querySelector(".nobody").classList.add("hidden");
-            })
+            socket.emit("joinroom", { userName, userImg });
+
+
+    socket.on("joined", function ({ roomname, opponentName, opponentImg }) {
+        room = roomname;
+        console.log("Joined room:", roomname, "Opponent:", opponentName);
+
+        document.querySelector(".nobody")?.classList.add("hidden");
+
+        // Hide waiting, show opponent
+        document.getElementById("waitingSection").classList.add("hidden");
+        document.getElementById("opponentSection").classList.remove("hidden");
+
+        // Set opponent info
+        document.getElementById("opponentName").innerText = opponentName;
+        document.getElementById("opponentImg").src = opponentImg || "/images/male1";
+    });
+
+
     
             // socket.on("message", function (message) {
             //     receiveMessage(message);

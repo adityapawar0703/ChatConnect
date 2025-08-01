@@ -7,17 +7,22 @@
 
     <span class="vs-text">vs</span>
 
-    <% if (opponentName && opponentImg) { %>
-      <div class="user-info opponent">
-        <img src="<%= opponentImg %>" alt="<%= opponentName %>" class="avatar" />
-        <span class="guest-label"><%= opponentName %></span>
-      </div>
-    <% } else { %>
-      <div class="user-info waiting">
-        <div class="waiting-circle">⏳</div>
-        <span class="guest-label">Waiting for user...</span>
-      </div>
-    <% } %>
+    <!-- Opponent Info (Initially hidden) -->
+<div class="user-info opponent hidden" id="opponentSection">
+  <img id="opponentImg" src="/default.jpg" alt="Opponent" class="avatar" />
+  <span id="opponentName" class="guest-label">Opponent</span>
+</div>
+
+<!-- Waiting Info (Visible by default) -->
+<div class="user-info waiting" id="waitingSection">
+  <div class="waiting-circle">⏳</div>
+  <span class="guest-label">Waiting for user...</span>
+</div>
+   <style>
+    .user-info.hidden {
+  display: none;
+}
+   </style>
   </div>
 
   <div class="navbar2-section language-selector">

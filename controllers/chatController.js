@@ -20,6 +20,7 @@ module.exports.chatPageController = (req,res)=>{
     
     // const opponentName="testing2";
     const opponentName=null;
+    
     const opponentImg = temp[Math.floor(Math.random()*temp.length)];
     res.render("chat",{userName,userImg, opponentName: opponentName, opponentImg: opponentImg});
 }
