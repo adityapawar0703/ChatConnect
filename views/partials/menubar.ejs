@@ -1,0 +1,107 @@
+<section class="menubar">
+    <section class="menubar">
+  <div class="menubar-container" id="menubar">
+    <button class="close-btn" onclick="closeMenubar()">&times;</button>
+    <div class="menubar-section">
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <a href="/contact">Contact</a>
+    </div>
+    <div class="menubar-section language-selector">
+     <label for="languageSelect" class="language-label">Language:</label>
+    <select id="languageSelect" class="language-select">
+      <option value="English">English</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Russian">Russian</option>
+      <option value="German">German</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Chinese">Chinese</option>
+    </select>
+    </div>
+  </div>
+</section>
+
+<style>
+    #menubar{
+        display: none;
+    }
+   .menubar-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  max-width: 90vw;
+  height: 100vh;
+  background: #f5f7fb;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.12);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 120px 28px 24px 80px;
+  box-sizing: border-box;
+  transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+}
+
+.close-btn {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.close-btn:hover {
+  color: #d21e1e;
+}
+
+.menubar-section {
+  width: 100%;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.menubar-section a {
+  text-decoration: none;
+  color: #272854;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+.menubar-section a:hover {
+  color: #9f81d8;
+  /* text-decoration: underline; */
+}
+
+.language-selector {
+  flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.language-label {
+  font-weight: 500;
+}
+
+.language-select {
+  padding: 0.4rem 0.8rem;
+  background-color: var(--card-color);
+  color: var(--text-color);
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 120px;
+}
+</style>
+<script>
+    function closeMenubar() {
+  document.querySelector('.menubar').style.display = 'none';
+}
+
+</script>
+</section>

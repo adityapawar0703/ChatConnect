@@ -166,9 +166,9 @@ button:hover {
         z-index: 999;
     }
 
-    .nav-links.show {
+    /* .nav-links.show {
         right: 0;
-    }
+    } */
 
     .nav-item {
         align-items: flex-start;

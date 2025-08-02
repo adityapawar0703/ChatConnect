@@ -98,6 +98,7 @@
       color: #333;
       overflow-x: hidden;
     }
+
    
     .hero {
       text-align: center;
@@ -216,7 +217,7 @@
             <div
                 class="text-zinc-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 text-center nobody">
                 Welcome to the chat room!<br>
-                The Room is empty, please wait for someone to join.
+                Start typing your messages below or click on the video call button to initiate a video call.
                </div>
         </main>
         <!-- <form id="chatform" class="bg-white p-4 flex">
@@ -268,7 +269,6 @@
 
            const userName = <%- JSON.stringify(userName) %>;
     const userImg = <%- JSON.stringify(userImg) %>;
-    const userGender = <%- JSON.stringify(gender) %>;
 
             socket.emit("joinroom", { userName, userImg });
 
@@ -296,16 +296,6 @@
                 //   below is trail for translation and  this is original code the above code is commented
             // trial for translation from here
 
-           //disconnect logic here 
-           socket.on("partner-disconnected", () => {
-                alert("Your partner has disconnected.");
-               window.location.href = `/chat?name=${encodeURIComponent(userName)}&gender=${userGender}`;
-            });
-
-
-
-
-            
             socket.on("message", async function (msg) {
     const userLang = localStorage.getItem("preferredLang") || "English"; 
 
@@ -630,7 +620,22 @@
                     document.querySelector('#cameraButton').classList.toggle('stopped', isEnabled);
                 }
             }
+
+            //this is temporary code  due to navbar error 
+           
+
         </script>
+        <script>
+            <!-- function isMobileDevice() {
+                return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase());
+            }
+
+            if (isMobileDevice()) {
+                // Redirect to your error page explaining desktop-only access
+                window.location.href = "/error"; // Change "/error" to your actual error page URL
+            } -->
+        </script>
+
 </body>
 
 </html>
