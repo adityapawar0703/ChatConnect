@@ -220,6 +220,33 @@
                 Start typing your messages below or click on the video call button to initiate a video call.
                </div>
         </main>
+        <style>
+            :root {
+                --chatform-shadow: rgba(0, 0, 0, 0.1);
+                --chatform-bg-color: #f4f7fa;
+                --chatform-text-color: #333;
+            }
+
+            body[data-theme='dark'] {
+                --bg-color: #1e1e1e;
+                --text-color: #f1f1f1;
+                --card-color: #2c2c2c;
+                --primary-color: #7aa2f7;
+                --tooltip-bg-color: #3a3a3a;
+                /* darker, custom tooltip bg for dark theme */
+                --tooltip-shadow: rgba(0, 0, 0, 0.6);
+                --chatform-bg-color: #2c2c2c;
+                 --chatform-text-color: #f1f1f1;
+            }
+            #chatform{
+               color: var(--chatform-text-color); /* optional to adapt text color on theme */
+                background-color: var(--chatform-bg-color); /* variable here */
+                 box-shadow: 0 2px 8px var(--chatform-shadow); /* adjustable shadow */
+            }
+            #messagebox{
+                color: black;
+            }
+        </style>
         <!-- <form id="chatform" class="bg-white p-4 flex">
             <input type="hidden" id="userid" value="">
             <input type="text" id="messagebox"
@@ -229,14 +256,15 @@
                 class="ml-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Send</button>
         </form> -->
       <!-- trial  above code is working fine , below code making theme consistent  -->
-        <form id="chatform" class="bg-white dark:bg-gray-800 p-4 flex">
+        <form id="chatform" class=" p-4 flex">
   <input type="hidden" id="userid" value="">
-  <input
-    type="text"
-    id="messagebox"
-    class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-    placeholder="Type a message"
-  >
+<input
+  type="text"
+  id="messagebox"
+  class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+  placeholder="Type a message"
+/>
+
   <button
     type="submit"
     class="ml-2 bg-indigo-600 dark:bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-600"
@@ -631,7 +659,7 @@
             }
 
             if (isMobileDevice()) {
-                // Redirect to your error page explaining desktop-only access
+               
                 window.location.href = "/error"; // Change "/error" to your actual error page URL
             } -->
         </script>

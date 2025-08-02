@@ -1,7 +1,10 @@
- <nav>
+<nav>
     <div class="logo">ChatConnect</div>
     <div class="hamburger" id="hamburger">☰</div>
     <div class="nav-links" id="navLinks">
+        <div class="closeBtn" id="closeBtn">✖</div>
+
+       
         <div class="nav-item">
             <a href="#">Home</a>
             <div class="tooltip">Go to homepage</div>
@@ -11,65 +14,115 @@
             <div class="tooltip">Learn more about us</div>
         </div>
         <div class="nav-item">
-            <a href="https://github.com/adityapawar0703" target="_blank">GitHub</a>
+            <a href="#">GitHub</a>
             <div class="tooltip">GitHub source — Aditya Pawar</div>
         </div>
         <div class="nav-item">
-            <a href="https://in.linkedin.com/in/aditya-pawar-b654b629a" target="_blank">LinkedIn</a>
+            <a href="#">LinkedIn</a>
             <div class="tooltip">Connect with the developer</div>
         </div>
         <div class="nav-item">
             <a href="#">Contact</a>
-            <!-- <div class="tooltip"></div> -->
         </div>
-    
-        <div class="theme-toggle" id="themeToggle">
-            <div class="toggle-slider">
-                <div class="dot"></div>
+
+        <!-- Wrap language selector and theme toggle inside nav-controls -->
+        <div class="nav-controls">
+            <div class="language-selector">
+                <label for="languageSelect" class="language-label">Language:</label>
+                <select id="languageSelect" class="language-select">
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Russian">Russian</option>
+                    <option value="German">German</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Chinese">Chinese</option>
+                </select>
+            </div>
+
+            <div class="theme-toggle" id="themeToggle">
+               <h2 class="theme-toggle-h2">Theme:</h2>  <div class="toggle-slider">
+                    <div class="dot"></div>
+                </div>
             </div>
         </div>
+
+     <style>
+        .theme-toggle-h2{
+            display: none;
+        }
+        .nav-controls{
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            justify-content: center;
+        }
+        @media (max-width: 768px) {
+            .nav-controls {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-left: 0;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            .theme-toggle-h2 {
+                display: block;
+            }
+            .theme-toggle{
+                display: flex;
+                gap: 0.5rem;
+            }
+        }
+     </style>
         <style>
             :root {
                 --bg-color: #f4f7fa;
                 --text-color: #333;
                 --card-color: #ffffff;
                 --primary-color: #4a90e2;
+                --tooltip-bg-color: #ffffff;
+                /* bright background for tooltip in light theme */
+                --tooltip-shadow: rgba(0, 0, 0, 0.1);
+                --chatform-bg-color: #f4f7fa;
             }
-    
+
             body[data-theme='dark'] {
                 --bg-color: #1e1e1e;
                 --text-color: #f1f1f1;
                 --card-color: #2c2c2c;
                 --primary-color: #7aa2f7;
+                --tooltip-bg-color: #3a3a3a;
+                /* darker, custom tooltip bg for dark theme */
+                --tooltip-shadow: rgba(0, 0, 0, 0.6);
+                --chatform-text-color: #f1f1f1;
             }
-    
+
             body {
                 background-color: var(--bg-color);
                 color: var(--text-color);
             }
-    
-         
+
+
             nav,
             .form-section {
                 background-color: var(--card-color);
             }
-    
+
             .nav-item a,
             .logo,
             .tooltip {
                 color: var(--text-color);
             }
-    
+
             button {
                 background-color: var(--primary-color);
             }
-    
+
             /* Toggle Switch */
             .theme-toggle {
                 cursor: pointer;
                 margin-left: 1rem;
             }
-    
+
             .toggle-slider {
                 width: 50px;
                 height: 24px;
@@ -78,7 +131,7 @@
                 position: relative;
                 transition: background-color 0.3s ease;
             }
-    
+
             .toggle-slider .dot {
                 width: 20px;
                 height: 20px;
@@ -89,38 +142,94 @@
                 left: 2px;
                 transition: left 0.3s ease, transform 0.3s ease;
             }
-    
+
             /* Dark Mode Activated */
             body[data-theme='dark'] .toggle-slider .dot {
                 left: 28px;
                 transform: rotate(180deg);
             }
-          
+
+
+            .language-selector {
+                flex-grow: 1;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .language-label {
+                font-weight: 500;
+            }
+
+            .language-select {
+                padding: 0.4rem 0.8rem;
+                background-color: var(--card-color);
+                color: var(--text-color);
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                min-width: 120px;
+            }
+
+            @media (max-width: 768px) {
+
+                /* Remove flex-grow so language selector doesn't take extra space */
+                .language-selector {
+                    flex-grow: 0;
+                    padding-left: 1.5rem;
+                    /* aligns with nav-item */
+                    margin-bottom: 1rem;
+                    /* optional spacing */
+                }
+
+                /* You can reduce the gap between nav-links items for tighter spacing */
+                .nav-links {
+                    gap: 1rem;
+                    /* reduce gap from 2rem to 1rem */
+                }
+
+                /* If theme-toggle inside nav-links is spaced too far, add this */
+                .theme-toggle {
+                    margin-left: 1.5rem;
+                    /* keep consistent with nav items */
+                }
+
+            }
         </style>
         <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const nav = document.getElementById('navLinks');
-    const hamburger = document.getElementById('hamburger');
-    const toggle = document.getElementById('themeToggle');
+            document.addEventListener("DOMContentLoaded", function () {
+                const nav = document.getElementById('navLinks');
+                const hamburger = document.getElementById('hamburger');
+                const toggle = document.getElementById('themeToggle');
 
-   
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.body.setAttribute('data-theme', savedTheme);
 
-    hamburger.addEventListener('click', function () {
-      nav.classList.toggle('show');
-    });
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.body.setAttribute('data-theme', savedTheme);
 
-    toggle.addEventListener('click', function () {
-      const currentTheme = document.body.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-      document.body.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-    });
-  });
-</script>
+                // const hamburger = document.getElementById('hamburger');
+                const closeBtn = document.getElementById('closeBtn');
 
-    </div>  </nav>
+                hamburger.addEventListener('click', function () {
+                    nav.classList.toggle('show');
+                    closeBtn.style.display = 'block';
+                    console.log("Hamburger menu clicked");
+                });
 
-  
+                closeBtn.addEventListener('click', function () {
+                    console.log("Close button clicked");
+                    nav.classList.toggle('show');
+                    //   navLinks.classList.remove('show');
+                    closeBtn.style.display = 'none';
+                });
+
+                toggle.addEventListener('click', function () {
+                    const currentTheme = document.body.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                    document.body.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                });
+            });
+        </script>
+
+    </div>
+</nav>

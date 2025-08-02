@@ -1,11 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function () {
-    const nav = document.getElementById('navLinks');
-    const hamburger = document.getElementById('hamburger');
-
-    hamburger.addEventListener('click', function () {
-        nav.classList.toggle('show');
-    });
+   
 
     document.getElementById('userForm').addEventListener('submit', function (e) {
         e.preventDefault();

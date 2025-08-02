@@ -34,6 +34,7 @@ nav {
 .nav-links {
     display: flex;
     gap: 2rem;
+    align-items: center;
 }
 
 .nav-item {
@@ -57,10 +58,11 @@ nav {
 .tooltip {
     opacity: 0;
     transform: translateY(10px);
-    background-color: #ffffff;
+
+    background-color: var(--tooltip-bg-color); /* variable here */
     padding: 0.5rem 1rem;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px var(--tooltip-shadow); /* adjustable shadow */
     font-size: 0.85rem;
     white-space: nowrap;
     pointer-events: none;
@@ -70,6 +72,8 @@ nav {
     max-width: 200px;
     text-align: center;
     z-index: 10;
+
+    color: var(--text-color); /* optional to adapt text color on theme */
 }
 
 .nav-item:hover .tooltip {
@@ -144,6 +148,12 @@ button {
 button:hover {
     background-color: #357bd8;
 }
+.closeBtn{
+    display: none;
+    position: relative;
+    right: 2%;
+    top: 1%;
+}
 
 /* Responsive Navbar */
 @media (max-width: 768px) {
@@ -151,7 +161,7 @@ button:hover {
         display: block;
     }
 
-    .nav-links {
+    /* .nav-links {
         position: fixed;
         top: 0;
         right: -100%;
@@ -164,28 +174,53 @@ button:hover {
         box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
         transition: right 0.3s ease;
         z-index: 999;
-    }
-
-    /* .nav-links.show {
-        right: 0;
     } */
+ .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 250px;
+    background-color: var(--card-color); /* <-- use variable here */
+    flex-direction: column;
+    padding-top: 5rem;
+    /* gap: 2rem; */
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 999;
+    color: var(--text-color);
+  }
+    .nav-links.show {
+        right: 0;
+    }
 
     .nav-item {
         align-items: flex-start;
         padding-left: 1.5rem;
     }
 
-    .tooltip {
-        position: relative;
-        top: auto;
-        transform: none;
-        opacity: 1;
-        padding-left: 0;
-        box-shadow: none;
-        font-size: 0.8rem;
-    }
+   
 
     .nav-item:hover .tooltip {
-        transform: none;
+         opacity: 1;
+    transform: translateY(0);
     }
+    .closeBtn {
+        display: block;
+        font-size: 1.5rem;
+        color: #4a90e2;
+        cursor: pointer;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+    nav {
+    display: flex;
+    justify-content: safe;
 }
+ 
+}
+
+ .closeBtn:active {
+       transform: scale(0.95);
+    }
