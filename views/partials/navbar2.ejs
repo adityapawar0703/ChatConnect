@@ -22,6 +22,9 @@
     .user-info.hidden {
   display: none;
 }
+.change-button{
+  background-color: rgba(220, 152, 152, 0.714);
+}
    </style>
   </div>
 
@@ -44,6 +47,7 @@
       </svg>
       <span class="button-text">Start Video Call</span>
     </button>
+    <button id="next" class="change-button bg-red-400"  onclick="window.location.href = '/chat?name=<%= encodeURIComponent(userName) %>&gender=<%= encodeURIComponent(gender) %>';">change</button>
   </div>
 </header>
 
@@ -163,6 +167,8 @@ body {
   .navbar2 {
     flex-direction: column;
     align-items: center;
+    padding: 1rem;
+    gap: 0.1rem;
   }
   .navbar2-left{
     padding-left: 20px;
@@ -171,6 +177,7 @@ body {
   .language-selector{
     justify-content: flex-end;
     align-items: center;
+    display: none;
   }
   .navbar2-section {
     width: 100%;
