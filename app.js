@@ -14,52 +14,42 @@ const io = socketIO(server);
 let waitingusers = [];
 let rooms = {};
 
+let pairedUsers = new Map(); // key: socket.id, value: partner's socket.id
+
 io.on("connection", function (socket) {
-  // socket.on("joinroom", function () {
-  //   console.log("User joined room");
-  //   if (waitingusers.length > 0) {
-  //     let partner = waitingusers.shift();
-  //     const roomname = `${socket.id}-${partner.id}`;
-
-  //     socket.join(roomname);
-  //     partner.join(roomname);
-
-  //     io.to(roomname).emit("joined", roomname);
-  //   } else {
-  //     waitingusers.push(socket);
-  //   }
-  // });
   socket.on("joinroom", function ({ userName, userImg }) {
-  socket.userName = userName;
-  socket.userImg = userImg;
+    socket.userName = userName;
+    socket.userImg = userImg;
 
-  if (waitingusers.length > 0) {
-    let partner = waitingusers.shift();
-    const roomname = `${socket.id}-${partner.id}`;
+    if (waitingusers.length > 0) {
+      let partner = waitingusers.shift();
+      const roomname = `${socket.id}-${partner.id}`;
 
-    socket.join(roomname);
-    partner.join(roomname);
+      socket.join(roomname);
+      partner.join(roomname);
 
-    // Send each user the data of their partner
-    io.to(socket.id).emit("joined", {
-      roomname,
-      opponentName: partner.userName,
-      opponentImg: partner.userImg
-    });
+      // Track pairing
+      pairedUsers.set(socket.id, partner.id);
+      pairedUsers.set(partner.id, socket.id);
 
-    io.to(partner.id).emit("joined", {
-      roomname,
-      opponentName: socket.userName,
-      opponentImg: socket.userImg
-    });
-    console.log("Room created:", roomname, "users:", socket.userName, partner.userName, "images:", socket.userImg, partner.userImg);
+      // Send each user the data of their partner
+      io.to(socket.id).emit("joined", {
+        roomname,
+        opponentName: partner.userName,
+        opponentImg: partner.userImg,
+      });
 
-  } else {
-    waitingusers.push(socket);
-  }
-});
-  
+      io.to(partner.id).emit("joined", {
+        roomname,
+        opponentName: socket.userName,
+        opponentImg: socket.userImg,
+      });
 
+      console.log("Room created:", roomname, "users:", socket.userName, partner.userName);
+    } else {
+      waitingusers.push(socket);
+    }
+  });
 
   socket.on("signalingMessage", function (data) {
     socket.broadcast.to(data.room).emit("signalingMessage", data.message);
@@ -70,7 +60,6 @@ io.on("connection", function (socket) {
   });
 
   socket.on("startVideoCall", function ({ room }) {
-    // sound effect pending
     socket.broadcast.to(room).emit("incomingCall");
   });
 
@@ -83,11 +72,26 @@ io.on("connection", function (socket) {
   });
 
   socket.on("disconnect", function () {
-    let index = waitingusers.findIndex(
-      (waitingUser) => waitingUser.id === socket.id
-    );
+    console.log("User disconnected:", socket.id);
 
-    waitingusers.splice(index, 1);
+    // Remove from waiting list
+    const index = waitingusers.findIndex((u) => u.id === socket.id);
+    if (index !== -1) {
+      waitingusers.splice(index, 1);
+    }
+
+    // If user was paired, disconnect the partner
+    const partnerId = pairedUsers.get(socket.id);
+    if (partnerId) {
+      const partnerSocket = io.sockets.sockets.get(partnerId);
+      if (partnerSocket) {
+        partnerSocket.emit("partner-disconnected");
+        partnerSocket.disconnect(true);
+      }
+
+      pairedUsers.delete(socket.id);
+      pairedUsers.delete(partnerId);
+    }
   });
 });
 

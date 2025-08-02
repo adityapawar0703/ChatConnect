@@ -171,6 +171,7 @@
   </style>
    
   
+    <%- include('partials/nav') %> 
     <%- include('partials/navbar2') %> 
         <div class="fixed videoblock hidden z-[222] w-full h-svh">
             <div id="videos">
@@ -215,7 +216,7 @@
             <div
                 class="text-zinc-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 text-center nobody">
                 Welcome to the chat room!<br>
-                Start typing your messages below or click on the video call button to initiate a video call.
+                The Room is empty, please wait for someone to join.
                </div>
         </main>
         <!-- <form id="chatform" class="bg-white p-4 flex">
@@ -267,6 +268,7 @@
 
            const userName = <%- JSON.stringify(userName) %>;
     const userImg = <%- JSON.stringify(userImg) %>;
+    const userGender = <%- JSON.stringify(gender) %>;
 
             socket.emit("joinroom", { userName, userImg });
 
@@ -294,6 +296,16 @@
                 //   below is trail for translation and  this is original code the above code is commented
             // trial for translation from here
 
+           //disconnect logic here 
+           socket.on("partner-disconnected", () => {
+                alert("Your partner has disconnected.");
+               window.location.href = `/chat?name=${encodeURIComponent(userName)}&gender=${userGender}`;
+            });
+
+
+
+
+            
             socket.on("message", async function (msg) {
     const userLang = localStorage.getItem("preferredLang") || "English"; 
 
