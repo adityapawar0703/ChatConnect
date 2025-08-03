@@ -21,7 +21,8 @@
         #videos {
             display: grid;
             grid-template-columns: 1fr;
-            height: 100vh;
+            height: 100%;
+            width: auto;
             overflow: hidden;
         }
 
@@ -29,7 +30,7 @@
             background-color: black;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .smallFrame {
@@ -72,8 +73,9 @@
 
         @media screen and (max-width: 600px) {
             .smallFrame {
-                height: 80px;
-                width: 120px;
+                height: 120px;
+                width: 160px;
+                 border-radius: 10px;
             }
 
             .control-container img {
@@ -174,7 +176,32 @@
   
     <%- include('partials/nav') %> 
     <%- include('partials/navbar2') %> 
-        <div class="fixed videoblock hidden z-[222] w-full h-svh">
+       <style>
+        .videoblock {
+            position: fixed;
+            bottom: 0;
+            right: 0; 
+            width: 100%;
+            height: 100%;
+            background-color: rgba(122, 107, 107, 0.733);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 222; /* Ensure it appears above other content */
+            padding: 30px 110px 0px 110px;
+            margin-top: 1rem;
+           
+
+        }
+        @media screen and (max-width: 600px) {
+            .videoblock {
+                padding: 10px 0px 0px 0px;
+                margin-top: 0;
+            }
+            
+        }
+       </style>
+        <div class="fixed videoblock">
             <div id="videos">
                 <video class="video-player" id="localVideo" autoplay muted playsinline></video>
                 <video class="video-player" id="remoteVideo" autoplay playsinline></video>
@@ -316,12 +343,17 @@
         document.getElementById("opponentImg").src = opponentImg || "/images/male1";
     });
 
+     // disconection logic if opponent disconnects 
+        socket.on('partner-disconnected', () => {
+            alert("Your partner has disconnected.");
+            window.location.reload();
+        });
 
     
             // socket.on("message", function (message) {
             //     receiveMessage(message);
             // })
-                //   below is trail for translation and  this is original code the above code is commented
+                //   below is trail for translation and  this is  the code the above code is commented
             // trial for translation from here
 
             socket.on("message", async function (msg) {
@@ -593,14 +625,16 @@
 
             socket.on("callAccepted", function () {
                 initialize();
-                document.querySelector(".videoblock").classList.remove("hidden");
+               // document.querySelector(".videoblock").classList.remove("hidden");
+                document.querySelector(".videoblock").style.display = "flex";
+
             })
 
             document.querySelector("#accept-call")
                 .addEventListener("click", function () {
                     document.querySelector("#incoming-call").classList.add("hidden");
                     initialize();
-                    document.querySelector(".videoblock").classList.remove("hidden");
+                    document.querySelector(".videoblock").style.display = "flex";
                     socket.emit("acceptCall", { room })
                 })
 
@@ -625,7 +659,7 @@
                     peerConnection = null;
                     localStream.getTracks().forEach(track => track.stop());
 
-                    document.querySelector(".videoblock").classList.add("hidden");
+                    document.querySelector(".videoblock").style.display = "none";
                     socket.emit("signalingMessage", { room, message: JSON.stringify({ type: "hangup" }) });
                     inCall = false;
                 }

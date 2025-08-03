@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-router.post("/translate", async (req, res) => {
+router.post("/translate", async (req, res) => {});
  
 
 module.exports = router;
