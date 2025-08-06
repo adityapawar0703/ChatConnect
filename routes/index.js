@@ -3,6 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 const path = require("path");
 const {chatPageController} =  require("../controllers/chatController");
+const { SendEmailController } = require("../controllers/emailController");
 const GEMINI_API_KEY =process.env.GEMINI_API_KEY;
 
 router.get("/", function (req, res) {
@@ -59,5 +60,7 @@ router.post("/translate", async (req, res) => {
     res.status(500).json({ error: "Translation failed" });
   }
 });
+
+router.post("/send-email", SendEmailController);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 {
-  "name": "omegle",
+  "name": "ChatConnect",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
@@ -9,13 +9,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Created a application that connects people randomly to chat with each other. It is a clone of Omegle. with real time message translation and email notification to owner when no one is available to chat.",
   "dependencies": {
     "axios": "^1.10.0",
-    "dotenv": "^17.2.0",
+    "dotenv": "^17.2.1",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "node-fetch": "^3.3.2",
+    "nodemailer": "^7.0.5",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {

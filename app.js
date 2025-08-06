@@ -10,7 +10,7 @@ const http = require("http");
 const socketIO = require("socket.io");
 const server = http.createServer(app);
 const io = socketIO(server);
-
+const sendEmail = require('./config.js/email')
 let waitingusers = [];
 let rooms = {};
 
@@ -47,6 +47,12 @@ io.on("connection", function (socket) {
 
       console.log("Room created:", roomname, "users:", socket.userName, partner.userName);
     } else {
+
+       if (waitingusers.length === 0) { 
+        // trial if anyone joins if no one is there email me
+        // sendEmail(userName || "Anonymous");
+        console.log("📩 Email sent: someone is waiting");
+  }
       waitingusers.push(socket);
     }
   });
