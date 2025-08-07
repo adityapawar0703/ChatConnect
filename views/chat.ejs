@@ -331,6 +331,10 @@
     socket.on("joined", function ({ roomname, opponentName, opponentImg }) {
         room = roomname;
         console.log("Joined room:", roomname, "Opponent:", opponentName);
+      //check langauge otherwise put english
+      if(localStorage.getItem("preferredLang") === null) {
+        localStorage.setItem("preferredLang", "English");
+      }
 
         document.querySelector(".nobody")?.classList.add("hidden");
 
@@ -358,7 +362,7 @@
 
             socket.on("message", async function (msg) {
     const userLang = localStorage.getItem("preferredLang") || "English"; 
-
+        console.log("Line 361  Received message:", msg, "User language:", userLang);
                 try {
                     const translated = await translateMessage(msg, userLang);
 

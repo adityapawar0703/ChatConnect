@@ -51,7 +51,8 @@ router.post("/translate", async (req, res) => {
     );
 
     const raw = response.data.candidates?.[0]?.content?.parts?.[0]?.text || "Translation failed.";
-    const cleaned = raw.split('\n')[0].trim(); // Take just the first line
+    // const cleaned = raw.split('\n')[0].trim(); 
+    const cleaned = raw.trim();
 
     res.json({ translation: cleaned });
 

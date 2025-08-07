@@ -11,10 +11,13 @@ const socketIO = require("socket.io");
 const server = http.createServer(app);
 const io = socketIO(server);
 const sendEmail = require('./config.js/email')
+const { startAIBotChat, getGeminiReply } = require('./config.js/botHandlerFunc');
 let waitingusers = [];
 let rooms = {};
 
 let pairedUsers = new Map(); // key: socket.id, value: partner's socket.id
+//  trial for AI bot with history trial 3
+const aiConversations = new Map(); // key: socket.id → array of message history
 
 io.on("connection", function (socket) {
   socket.on("joinroom", function ({ userName, userImg }) {
@@ -48,23 +51,57 @@ io.on("connection", function (socket) {
       console.log("Room created:", roomname, "users:", socket.userName, partner.userName);
     } else {
 
-       if (waitingusers.length === 0) { 
+      if (waitingusers.length === 0) {
         // trial if anyone joins if no one is there email me
         // sendEmail(userName || "Anonymous");
         console.log("📩 Email sent: someone is waiting");
-  }
+      }     
       waitingusers.push(socket);
+
+      setTimeout(() => {
+        if (waitingusers.includes(socket)) {
+          startAIBotChat(socket, io, waitingusers, pairedUsers, aiConversations);
+        }
+      }, 9000);
     }
   });
-
+   
   socket.on("signalingMessage", function (data) {
     socket.broadcast.to(data.room).emit("signalingMessage", data.message);
   });
 
-  socket.on("message", function (data) {
-    socket.broadcast.to(data.room).emit("message", data.message);
-  });
+  // socket.on("message", function (data) {
+  //   socket.broadcast.to(data.room).emit("message", data.message);
+  // });
+   socket.on("message", async function (data) {
+  const { room, message } = data;
+  const partnerId = pairedUsers.get(socket.id);
 
+  // ✅ AI chat
+  if (partnerId === "AI") {
+    const history = aiConversations.get(socket.id) || [];
+    history.push({ role: "user", content: message });
+
+    const reply = await getGeminiReply(history);
+
+    history.push({ role: "model", content: reply });
+    aiConversations.set(socket.id, history);
+
+    // ✅ Send only string, as expected by client
+    io.to(socket.id).emit("message", reply);
+
+    console.log("🧠 AI Reply sent:", reply);
+    return;
+  }
+
+  // ✅ User-to-user message — also send only string
+  socket.broadcast.to(room).emit("message", message);
+});
+
+
+  // socket.on("message", function (data) {
+  //   socket.broadcast.to(data.room).emit("message", data.message);
+  // });
   socket.on("startVideoCall", function ({ room }) {
     socket.broadcast.to(room).emit("incomingCall");
   });
