@@ -62,7 +62,7 @@ io.on("connection", function (socket) {
         if (waitingusers.includes(socket)) {
           startAIBotChat(socket, io, waitingusers, pairedUsers, aiConversations);
         }
-      }, 9000);
+      }, 12000);
     }
   });
    
