@@ -1,41 +1,117 @@
 const express = require("express");
 const app = express();
 require('dotenv').config();
-
-// const fetch = require('node-fetch'); 
-const indexRouter = require("./routes/index");
 const path = require("path");
+const indexRouter = require("./routes/index");
+
 
 const http = require("http");
 const socketIO = require("socket.io");
 const server = http.createServer(app);
 const io = socketIO(server);
-const sendEmail = require('./config.js/email')
+
+const sendEmail = require('./config.js/email'); // should export a function
 const { startAIBotChat, getGeminiReply } = require('./config.js/botHandlerFunc');
-let waitingusers = [];
-let rooms = {};
 
-let pairedUsers = new Map(); // key: socket.id, value: partner's socket.id
-//  trial for AI bot with history trial 3
-const aiConversations = new Map(); // key: socket.id → array of message history
 
-io.on("connection", function (socket) {
-  socket.on("joinroom", function ({ userName, userImg }) {
-    socket.userName = userName;
-    socket.userImg = userImg;
 
+app.set("view engine", "ejs");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/", indexRouter);
+
+
+let waitingusers = []; // array of socket objects waiting for a real partner
+let pairedUsers = new Map(); // socket.id => partner socket.id or "AI"
+let aiConversations = new Map(); // socket.id => conversation history (for AI)
+let aiSessions = new Map(); // realUserSocket.id => { startedAt: timestamp }  (tracks users currently talking to AI)
+
+// helper: remove socket from waitingusers
+function removeFromWaiting(socket) {
+  const idx = waitingusers.findIndex(u => u.id === socket.id);
+  if (idx !== -1) waitingusers.splice(idx, 1);
+}
+
+// helper: find a real user who currently has AI session (we pick the earliest)
+function pickAnAISessionUser() {
+  for (const [realUserId] of aiSessions.entries()) {
+    const s = io.sockets.sockets.get(realUserId);
+    if (s) return s;
+    
+    aiSessions.delete(realUserId);
+  }
+  return null;
+}
+
+// ---------------- Socket logic ----------------
+io.on("connection", (socket) => {
+  console.log("Socket connected:", socket.id);
+
+  socket.on("joinroom", ({ userName, userImg }) => {
+    socket.userName = userName || "Anonymous";
+    socket.userImg = userImg || "";
+
+    console.log(`joinroom: ${socket.userName} (${socket.id})`);
+
+    // 1) If there's any real user currently chatting with AI, pair new user with them immediately
+    const aiUserSocket = pickAnAISessionUser();
+    if (aiUserSocket) {
+      // socket.emit("switchToRealUser", {
+      //   partnerName: aiUserSocket.userName,
+      //   partnerImg: aiUserSocket.userImg
+      // });
+      io.to(aiUserSocket.id).emit("switchToRealUser");
+      console.log(`Found existing AI session , and we are  replaceing : AI-user ${aiUserSocket.id} -> pairing with new user ${socket.id}`);
+
+      // Clean up AI state for aiUserSocket
+      aiConversations.delete(aiUserSocket.id);
+      aiSessionsDeleteSafe(aiUserSocket.id); // helper below
+      // ensure aiUserSocket is removed from waitingusers if present
+      removeFromWaiting(aiUserSocket);
+
+      // Pair aiUserSocket (real user who had AI) with this incoming socket (new real user)
+      const roomname = `${aiUserSocket.id}-${socket.id}`;
+      aiUserSocket.join(roomname);
+      socket.join(roomname);
+
+      // Set pairing
+      pairedUsers.set(aiUserSocket.id, socket.id);
+      pairedUsers.set(socket.id, aiUserSocket.id);
+
+      // Notify both
+      io.to(aiUserSocket.id).emit("joined", {
+        roomname,
+        opponentName: socket.userName,
+        opponentImg: socket.userImg
+      });
+      io.to(socket.id).emit("joined", {
+        roomname,
+        opponentName: aiUserSocket.userName,
+        opponentImg: aiUserSocket.userImg
+      });
+
+      console.log(`✅ Switched AI-user ${aiUserSocket.userName} (${aiUserSocket.id}) to real user ${socket.userName} (${socket.id})`);
+      return;
+    }
+
+    // 2) No AI sessions to replace — if there's a waiting real user, pair them
     if (waitingusers.length > 0) {
-      let partner = waitingusers.shift();
-      const roomname = `${socket.id}-${partner.id}`;
+      const partner = waitingusers.shift();
 
+      // cleanup any AI state for partner (in case)
+      if (pairedUsers.get(partner.id) === "AI") {
+        aiConversations.delete(partner.id);
+        aiSessionsDeleteSafe(partner.id);
+      }
+
+      const roomname = `${socket.id}-${partner.id}`;
       socket.join(roomname);
       partner.join(roomname);
 
-      // Track pairing
       pairedUsers.set(socket.id, partner.id);
       pairedUsers.set(partner.id, socket.id);
 
-      // Send each user the data of their partner
       io.to(socket.id).emit("joined", {
         roomname,
         opponentName: partner.userName,
@@ -48,103 +124,118 @@ io.on("connection", function (socket) {
         opponentImg: socket.userImg,
       });
 
-      console.log("Room created:", roomname, "users:", socket.userName, partner.userName);
-    } else {
-
-      if (waitingusers.length === 0) {
-        // trial if anyone joins if no one is there email me
-        // sendEmail(userName || "Anonymous");
-        console.log("📩 Email sent: someone is waiting");
-      }     
-      waitingusers.push(socket);
-
-      setTimeout(() => {
-        if (waitingusers.includes(socket)) {
-          startAIBotChat(socket, io, waitingusers, pairedUsers, aiConversations);
-        }
-      }, 12000);
+      console.log(`Room created: ${roomname} users: ${socket.userName}, ${partner.userName}`);
+      return;
     }
-  });
+
+    // 3) No session of Ai present 
+    console.log(`${socket.userName} is the first waiting user — added to queue.`);
+    waitingusers.push(socket);
+
    
-  socket.on("signalingMessage", function (data) {
+    try {
+      if (typeof sendEmail === "function") {
+        sendEmail(socket.userName);
+        console.log("📩 Sent notification email (sendEmail called).");
+      }
+    } catch (e) {
+      console.warn("Failed to call sendEmail:", e.message || e);
+    }
+
+    // schedule AI fallback after configured delay (only start AI if still waiting and not paired)
+    setTimeout(() => {
+      // still waiting and not paired
+      if (waitingusers.includes(socket) && !pairedUsers.get(socket.id)) {
+        console.log(`No partner after timeout. Starting AI for ${socket.userName} (${socket.id})`);
+        // start AI chat and track session
+        startAIBotChat(socket, io, waitingusers, pairedUsers, aiConversations);
+        pairedUsers.set(socket.id, "AI");
+        aiSessions.set(socket.id, { startedAt: Date.now() });
+      }
+    }, 15000);
+  });
+
+
+  socket.on("signalingMessage", (data) => {
     socket.broadcast.to(data.room).emit("signalingMessage", data.message);
   });
 
-  // socket.on("message", function (data) {
-  //   socket.broadcast.to(data.room).emit("message", data.message);
-  // });
-   socket.on("message", async function (data) {
-  const { room, message } = data;
-  const partnerId = pairedUsers.get(socket.id);
+  // message handler
+  socket.on("message", async (data) => {
+    
+    const { room, message } = data;
+    const partnerId = pairedUsers.get(socket.id);
 
-  // ✅ AI chat
-  if (partnerId === "AI") {
-    const history = aiConversations.get(socket.id) || [];
-    history.push({ role: "user", content: message });
+    // if chatting with AI
+    if (partnerId === "AI") {
+      const history = aiConversations.get(socket.id) || [];
+      history.push({ role: "user", content: message });
 
-    const reply = await getGeminiReply(history);
+      const reply = await getGeminiReply(history);
 
-    history.push({ role: "model", content: reply });
-    aiConversations.set(socket.id, history);
+      history.push({ role: "model", content: reply });
+      aiConversations.set(socket.id, history);
 
-    // ✅ Send only string, as expected by client
-    io.to(socket.id).emit("message", reply);
+      // send plain string to client (your client expects string)
+      io.to(socket.id).emit("message", reply);
+      console.log(`🧠 AI Reply sent to ${socket.userName}:`, reply);
+      return;
+    }
 
-    console.log("🧠 AI Reply sent:", reply);
-    return;
-  }
+    // normal user-user chat
+    socket.broadcast.to(room).emit("message", message);
+  });
 
-  // ✅ User-to-user message — also send only string
-  socket.broadcast.to(room).emit("message", message);
-});
-
-
-  // socket.on("message", function (data) {
-  //   socket.broadcast.to(data.room).emit("message", data.message);
-  // });
-  socket.on("startVideoCall", function ({ room }) {
+  // video call events (unchanged)
+  socket.on("startVideoCall", ({ room }) => {
     socket.broadcast.to(room).emit("incomingCall");
   });
-
-  socket.on("rejectCall", function ({ room }) {
+  socket.on("rejectCall", ({ room }) => {
     socket.broadcast.to(room).emit("callRejected");
   });
-
-  socket.on("acceptCall", function ({ room }) {
+  socket.on("acceptCall", ({ room }) => {
     socket.broadcast.to(room).emit("callAccepted");
   });
 
-  socket.on("disconnect", function () {
+  
+
+  // disconnect handler
+  socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
-
-    // Remove from waiting list
-    const index = waitingusers.findIndex((u) => u.id === socket.id);
-    if (index !== -1) {
-      waitingusers.splice(index, 1);
-    }
-
-    // If user was paired, disconnect the partner
+   
+    removeFromWaiting(socket);
     const partnerId = pairedUsers.get(socket.id);
+    // if (partnerId && partnerId !== "AI") {
     if (partnerId) {
       const partnerSocket = io.sockets.sockets.get(partnerId);
       if (partnerSocket) {
+       
         partnerSocket.emit("partner-disconnected");
-        partnerSocket.disconnect(true);
+        try { partnerSocket.disconnect(true); } catch(e) { 
+          console.log("error in line 219:", e);
+        }
       }
-
-      pairedUsers.delete(socket.id);
       pairedUsers.delete(partnerId);
+       pairedUsers.delete(socket.id);
     }
+
+    if (aiSessions.has(socket.id)) {
+      aiSessions.delete(socket.id);
+      aiConversations.delete(socket.id);
+    }
+
+    pairedUsers.delete(socket.id);
+    aiConversations.delete(socket.id);
   });
 });
 
-app.set("view engine", "ejs");
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+//  delete the AI session in queue
+function aiSessionsDeleteSafe(socketId) {
+  if (aiSessions.has(socketId)) {
+    aiSessions.delete(socketId);
+  }
+}
 
-
-app.use("/", indexRouter);
-
-server.listen(process.env.PORT || 3000);
-console.log("Server is running on port 3000");
+server.listen(process.env.PORT || 3000, () => {
+  console.log("Server is running on port", process.env.PORT || 3000);
+});

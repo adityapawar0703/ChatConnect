@@ -201,6 +201,35 @@
             
         }
        </style>
+   
+     <!-- Modal: Prompt to switch from AI to real user -->
+<!-- <div id="switchPrompt"
+     class="hidden fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-md w-full p-6">
+    
+    <p class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 text-center">
+      A real user is available. Do you want to switch?
+    </p>
+
+    <div class="flex items-center space-x-3 mb-4 justify-center">
+      <img id="realUserImg" src="" alt="User" class="w-12 h-12 rounded-full border" />
+      <span id="realUserName" class="font-medium text-gray-900 dark:text-gray-100 text-base"></span>
+    </div>
+
+    <div class="flex justify-center gap-4 mt-2">
+      <button id="acceptRealUser"
+              class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-md transition">
+        Yes
+      </button>
+      <button id="declineRealUser"
+              class="bg-gray-300 hover:bg-gray-400 text-gray-800 dark:text-white px-5 py-2 rounded-md transition">
+        No
+      </button>
+    </div>
+  </div>
+</div> -->
+
+
         <div class="fixed videoblock">
             <div id="videos">
                 <video class="video-player" id="localVideo" autoplay muted playsinline></video>
@@ -471,7 +500,7 @@
                 container.scrollTop = container.scrollHeight;
             }
 
-
+             
              async function translateMessage(message, targetLang) {
                     const response = await fetch("/translate", {
                         method: "POST",
@@ -688,7 +717,17 @@
             }
 
             //this is temporary code  due to navbar error 
-           
+           //when real user arrives notify other user in ai cha
+
+           // Clear chat messages function
+    
+
+    socket.on("switchToRealUser", () => {
+        alert("A real user is available. You will be switched to them.");
+
+    window.location.reload();
+
+});
 
         </script>
         <script>

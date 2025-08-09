@@ -12,17 +12,17 @@ const startAIBotChat = (socket, io, waitingusers, pairedUsers, aiConversations) 
   const roomname = `ai-${socket.id}`;
   socket.join(roomname);
 
-  // Use user message as system message since Gemini doesn't support 'system' role
+
   aiConversations.set(socket.id, [
     { role: "user", content: SYSTEM_MESSAGE }
   ]);
 
   io.to(socket.id).emit("joined", {
     roomname,
-    opponentName: "AI Agent 🤖",
-    opponentImg: "/images/ai-bot.png"
+    opponentName: "AI Agent",
+    opponentImg: "/images/ai-bot2.png"
   });
-   var aiMessage = `Hi! I'm an AI agent chatting while we wait for someone to join. Ask me anything!`;
+   var aiMessage = `Hi! Welcome to ChatConnet!  I'm an AI agent chatting while we wait for someone to join. Ask me anything!`;
   io.to(socket.id).emit("message",  aiMessage);
 
   console.log("✅ AI bot started for:", socket.userName, "Room:", roomname);
