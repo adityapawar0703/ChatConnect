@@ -7,8 +7,9 @@
 ### 💡 What Makes ChatConnect Different?
 
 > 🌍 **Break the communication barrier!**  
-ChatConnect lets you connect with people around the world **without language limitations** — thanks to real-time voice and text translation (coming soon).  
+ChatConnect lets you connect with people around the world **without language limitations** — thanks to real-time text translation (coming soon).  
 Make friends, share ideas, build something meaningful together — or just talk and reduce your loneliness.
+💬 If no real user is available, an AI bot will join your chat so you can keep the conversation going.
 
 ---
 
@@ -30,9 +31,11 @@ You can try out the early version of ChatConnect by following these steps:
 - ✅ Random user matching
 - ✅ Light & Dark theme support
 - ✅ Clean, modern UI
-- 🔄 Real-time text chat with auto translation (coming soon)
-- 🔄 Typing indicator, language selection, and moderation tools
-- 🔄 Mobile responsiveness
+- ✅ Real-time text chat with auto translation.
+- ✅ AI bot fallback if no user is available
+- ✅ Typing indicator, language selection, and moderation tools
+- ✅ Mobile responsiveness
+  
 
 ---
 
@@ -41,7 +44,8 @@ You can try out the early version of ChatConnect by following these steps:
 - **Frontend**: HTML, CSS (Tailwind), JavaScript, EJS
 - **Backend**: Node.js, Express.js
 - **Real-Time**: WebRTC, Socket.IO
-- **Hosting**: [To be added]
+- **Hosting**: Render
+- **AI & Translation**: Google Gemini API
 
 ---
 
