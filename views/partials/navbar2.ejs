@@ -2,32 +2,39 @@
   <div class="navbar2-section navbar2-left">
     <div class="user-info">
       <img src="<%= userImg %>" alt="<%= userName %>" class="avatar" />
-      <span class="guest-label"><%= userName %></span>
+      <span class="guest-label">
+        <%= userName %>
+      </span>
     </div>
 
     <span class="vs-text">vs</span>
 
     <!-- Opponent Info (Initially hidden) -->
-<div class="user-info opponent hidden" id="opponentSection">
-  <img id="opponentImg" src="/default.jpg" alt="Opponent" class="avatar" />
-  <span id="opponentName" class="guest-label">Opponent</span>
-</div>
+    <div class="user-info opponent hidden" id="opponentSection">
+      <img id="opponentImg" src="/default.jpg" alt="Opponent" class="avatar" />
+      <span id="opponentName" class="guest-label">Opponent</span>
+    </div>
 
-<!-- Waiting Info (Visible by default) -->
-<div class="user-info waiting" id="waitingSection">
-  <div class="waiting-circle">⏳</div>
-  <span class="guest-label">Waiting for user...</span>
-</div>
-   <style>
-    .user-info.hidden {
-  display: none;
-}
-.change-button{
-  background-color: rgba(220, 152, 152, 0.714);
-}
-   </style>
+    <!-- Waiting Info (Visible by default) -->
+    <div class="user-info waiting" id="waitingSection">
+      <div class="waiting-circle">⏳</div>
+      <span class="guest-label">Waiting for user...</span>
+    </div>
+
+
+    <style>
+      .user-info.hidden {
+        display: none;
+      }
+
+      .change-button {
+        background-color: rgba(220, 152, 152, 0.714);
+      }
+    </style>
+    <div id="user-count" class="fixed top-2 right-4 bg-gray-800 text-white px-3 py-1 rounded-lg shadow-md">
+      Active Users: 0
+    </div>
   </div>
-
   <!-- <div class="navbar2-section language-selector">
     <label for="languageSelect" class="language-label">Language:</label>
     <select id="languageSelect" class="language-select">
@@ -40,14 +47,35 @@
     </select>
   </div> -->
 
+  <style>
+    #user-count {
+      z-index: 10;
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    @media (max-width: 768px) {
+      #user-count {
+        position: static;
+        transform: none;
+        margin-top: 1rem;
+        left: auto;
+        margin-left: 4rem;
+      }
+    }
+  </style>
   <div class="navbar2-section navbar2-right">
     <button id="video-call-btn" class="video-call-button">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24">
-        <path d="M17 10.5V6c0-1.1-.9-2-2-2H3C1.9 4 1 4.9 1 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4.5l5 5v-13l-5 5z"/>
+        <path d="M17 10.5V6c0-1.1-.9-2-2-2H3C1.9 4 1 4.9 1 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4.5l5 5v-13l-5 5z" />
       </svg>
       <span class="button-text">Start Video Call</span>
     </button>
-    <button id="next" class="change-button bg-red-400"  onclick="window.location.href = '/chat?name=<%= encodeURIComponent(userName) %>&gender=<%= encodeURIComponent(gender) %>';">change</button>
+    <button id="next" class="change-button bg-red-400"
+      onclick="window.location.href = '/chat?name=<%= encodeURIComponent(userName) %>&gender=<%= encodeURIComponent(gender) %>';">change</button>
   </div>
 </header>
 
@@ -58,135 +86,138 @@
 </script>
 
 <style>
-:root {
-  --bg-color: #f4f7fa;
-  --text-color: #333;
-  --card-color: #ffffff;
-  --primary-color: #4a90e2;
-  --accent-color: #6df966;
-  --error-color: #ff5050;
-}
+  :root {
+    --bg-color: #f4f7fa;
+    --text-color: #333;
+    --card-color: #ffffff;
+    --primary-color: #4a90e2;
+    --accent-color: #6df966;
+    --error-color: #ff5050;
+  }
 
-body[data-theme='dark'] {
-  --bg-color: #1e1e1e;
-  --text-color: #f1f1f1;
-  --card-color: #2c2c2c;
-  --primary-color: #7aa2f7;
-  --accent-color: #6df966;
-  --error-color: #ff4e4e;
-}
+  body[data-theme='dark'] {
+    --bg-color: #1e1e1e;
+    --text-color: #f1f1f1;
+    --card-color: #2c2c2c;
+    --primary-color: #7aa2f7;
+    --accent-color: #6df966;
+    --error-color: #ff4e4e;
+  }
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.3s, color 0.3s;
-  font-family: 'Segoe UI', sans-serif;
-}
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
+    font-family: 'Segoe UI', sans-serif;
+  }
 
-.navbar2 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: rgba(231, 216, 216, 0.08);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  gap: 1rem;
-}
-
-.navbar2-section {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.navbar2-left {
-  flex: 1;
-  min-width: 120px;
-}
-
-.navbar2-right {
-  flex-shrink: 0;
-}
-
-.avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.guest-label {
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.language-selector {
-  flex-grow: 1;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.language-label {
-  font-weight: 500;
-}
-
-.language-select {
-  padding: 0.4rem 0.8rem;
-  background-color: var(--card-color);
-  color: var(--text-color);
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  min-width: 120px;
-}
-
-.video-call-button {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 0.3s ease;
-}
-
-.video-call-button:hover {
-  filter: brightness(0.95);
-}
-
-/* Hide button text on small screens */
-
-
-/* Stack sections vertically on smaller screens */
-@media (max-width: 768px) {
   .navbar2 {
-    flex-direction: column;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    gap: 0.1rem;
+    padding: 0.75rem 1rem;
+    background-color: rgba(231, 216, 216, 0.08);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    gap: 1rem;
   }
-  .navbar2-left{
-    padding-left: 20px;
-    text-align: center;
-  }
-  .language-selector{
-    justify-content: flex-end;
-    align-items: center;
-   
-  }
+
   .navbar2-section {
-    width: 100%;
-   
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .navbar2-left {
+    flex: 1;
+    min-width: 120px;
   }
 
   .navbar2-right {
-    width: 100%;
-    justify-content: center;
+    flex-shrink: 0;
   }
-}
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .guest-label {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .language-selector {
+    flex-grow: 1;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .language-label {
+    font-weight: 500;
+  }
+
+  .language-select {
+    padding: 0.4rem 0.8rem;
+    background-color: var(--card-color);
+    color: var(--text-color);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    min-width: 120px;
+  }
+
+  .video-call-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .video-call-button:hover {
+    filter: brightness(0.95);
+  }
+
+  /* Hide button text on small screens */
+
+
+  /* Stack sections vertically on smaller screens */
+  @media (max-width: 768px) {
+    .navbar2 {
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      gap: 0.1rem;
+    }
+
+    .navbar2-left {
+      padding-left: 20px;
+      text-align: center;
+    }
+
+    .language-selector {
+      justify-content: flex-end;
+      align-items: center;
+
+    }
+
+    .navbar2-section {
+      width: 100%;
+
+    }
+
+    .navbar2-right {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 </style>

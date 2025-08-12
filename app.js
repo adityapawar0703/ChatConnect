@@ -26,7 +26,7 @@ let waitingusers = []; // array of socket objects waiting for a real partner
 let pairedUsers = new Map(); // socket.id => partner socket.id or "AI"
 let aiConversations = new Map(); // socket.id => conversation history (for AI)
 let aiSessions = new Map(); // realUserSocket.id => { startedAt: timestamp }  (tracks users currently talking to AI)
-
+var activeUsers = 0;
 // helper: remove socket from waitingusers
 function removeFromWaiting(socket) {
   const idx = waitingusers.findIndex(u => u.id === socket.id);
@@ -47,6 +47,9 @@ function pickAnAISessionUser() {
 // ---------------- Socket logic ----------------
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
+    activeUsers++;
+    io.emit("updateUserCount", activeUsers); 
+    console.log(`User connected. Active users: ${activeUsers}`);
 
   socket.on("joinroom", ({ userName, userImg }) => {
     socket.userName = userName || "Anonymous";
@@ -135,7 +138,7 @@ io.on("connection", (socket) => {
    
     try {
       if (typeof sendEmail === "function") {
-        sendEmail(socket.userName);
+        // sendEmail(socket.userName);
         console.log("📩 Sent notification email (sendEmail called).");
       }
     } catch (e) {
@@ -201,6 +204,9 @@ io.on("connection", (socket) => {
 
   // disconnect handler
   socket.on("disconnect", () => {
+      activeUsers--;
+        io.emit("updateUserCount", activeUsers);
+        console.log(`User disconnected. Active users: ${activeUsers}`);
     console.log("User disconnected:", socket.id);
    
     removeFromWaiting(socket);

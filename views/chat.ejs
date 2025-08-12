@@ -726,7 +726,11 @@
         alert("A real user is available. You will be switched to them.");
 
     window.location.reload();
-
+  
+});
+            socket.on("updateUserCount", (count) => {
+                console.log("User count updated:", count);
+    document.getElementById("user-count").textContent = `Active Users: ${count}`;
 });
 
         </script>
