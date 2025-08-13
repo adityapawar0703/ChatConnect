@@ -21,7 +21,7 @@ transporter.verify((error, success) => {
   }
 });
 const sendEmail = async (userName) => {
-  
+   console.log("line 24 in email.js called");
   try {
     const info = await transporter.sendMail({
       from: `<${process.env.EMAIL_USER}>`, // sender address

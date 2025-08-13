@@ -22,18 +22,18 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 
 
-let waitingusers = []; // array of socket objects waiting for a real partner
-let pairedUsers = new Map(); // socket.id => partner socket.id or "AI"
-let aiConversations = new Map(); // socket.id => conversation history (for AI)
-let aiSessions = new Map(); // realUserSocket.id => { startedAt: timestamp }  (tracks users currently talking to AI)
+let waitingusers = []; 
+let pairedUsers = new Map(); 
+let aiConversations = new Map();
+let aiSessions = new Map(); 
 var activeUsers = 0;
-// helper: remove socket from waitingusers
+
 function removeFromWaiting(socket) {
   const idx = waitingusers.findIndex(u => u.id === socket.id);
   if (idx !== -1) waitingusers.splice(idx, 1);
 }
 
-// helper: find a real user who currently has AI session (we pick the earliest)
+
 function pickAnAISessionUser() {
   for (const [realUserId] of aiSessions.entries()) {
     const s = io.sockets.sockets.get(realUserId);
@@ -44,7 +44,7 @@ function pickAnAISessionUser() {
   return null;
 }
 
-// ---------------- Socket logic ----------------
+
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
     activeUsers++;
@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
 
     console.log(`joinroom: ${socket.userName} (${socket.id})`);
 
-    // 1) If there's any real user currently chatting with AI, pair new user with them immediately
+    
     const aiUserSocket = pickAnAISessionUser();
     if (aiUserSocket) {
       // socket.emit("switchToRealUser", {
@@ -67,22 +67,22 @@ io.on("connection", (socket) => {
       io.to(aiUserSocket.id).emit("switchToRealUser");
       console.log(`Found existing AI session , and we are  replaceing : AI-user ${aiUserSocket.id} -> pairing with new user ${socket.id}`);
 
-      // Clean up AI state for aiUserSocket
+     
       aiConversations.delete(aiUserSocket.id);
-      aiSessionsDeleteSafe(aiUserSocket.id); // helper below
-      // ensure aiUserSocket is removed from waitingusers if present
+      aiSessionsDeleteSafe(aiUserSocket.id); 
+     
       removeFromWaiting(aiUserSocket);
 
-      // Pair aiUserSocket (real user who had AI) with this incoming socket (new real user)
+     
       const roomname = `${aiUserSocket.id}-${socket.id}`;
       aiUserSocket.join(roomname);
       socket.join(roomname);
 
-      // Set pairing
+      
       pairedUsers.set(aiUserSocket.id, socket.id);
       pairedUsers.set(socket.id, aiUserSocket.id);
 
-      // Notify both
+      
       io.to(aiUserSocket.id).emit("joined", {
         roomname,
         opponentName: socket.userName,
@@ -94,7 +94,7 @@ io.on("connection", (socket) => {
         opponentImg: aiUserSocket.userImg
       });
 
-      console.log(`✅ Switched AI-user ${aiUserSocket.userName} (${aiUserSocket.id}) to real user ${socket.userName} (${socket.id})`);
+      console.log(`Switched AI-user ${aiUserSocket.userName} (${aiUserSocket.id}) to real user ${socket.userName} (${socket.id})`);
       return;
     }
 
@@ -137,15 +137,15 @@ io.on("connection", (socket) => {
 
    
     try {
-      if (typeof sendEmail === "function") {
+      // if (typeof sendEmail === "function") {
         // sendEmail(socket.userName);
-        console.log("📩 Sent notification email (sendEmail called).");
-      }
+        console.log("Sent notification email (sendEmail called).");
+      // }
     } catch (e) {
       console.warn("Failed to call sendEmail:", e.message || e);
     }
 
-    // schedule AI fallback after configured delay (only start AI if still waiting and not paired)
+    
     setTimeout(() => {
       // still waiting and not paired
       if (waitingusers.includes(socket) && !pairedUsers.get(socket.id)) {
