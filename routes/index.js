@@ -4,6 +4,7 @@ const axios = require('axios');
 const path = require("path");
 const {chatPageController} =  require("../controllers/chatController");
 const { SendEmailController } = require("../controllers/emailController");
+const { Socket } = require("socket.io");
 const GEMINI_API_KEY =process.env.GEMINI_API_KEY;
 
 router.get("/", function (req, res) {
@@ -58,6 +59,7 @@ router.post("/translate", async (req, res) => {
 
   } catch (err) {
     console.error("Translation failed:", err.message);
+    
     res.status(500).json({ error: "Translation failed" });
   }
 });

@@ -31,7 +31,7 @@ const sendEmail = async (userName) => {
       html: `
         <h2>User Alert</h2>
         <p>A ${userName || "Anonymous user"} just joined <strong>ChatConnect</strong>.</p>
-        <p><a href="https://your-chatconnect-link.com" target="_blank">Click here to join now!</a></p>
+        <p><a href="https://chat-connect-rkru4.ondigitalocean.app/" target="_blank">Click here to join now!</a></p>
       `,
     });
 

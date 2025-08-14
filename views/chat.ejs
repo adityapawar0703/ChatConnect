@@ -234,7 +234,7 @@
         <div id="incoming-call"
             class="fixed hidden z-[222] w-full h-dvh bg-gray-900 bg-opacity-75 flex items-center justify-center">
             <div class="bg-white p-8 rounded-md text-center">
-                <p class="mb-4">Incoming Call...</p>
+                <p class="mb-4 text-black">Incoming Call...</p>
                 <button id="accept-call" class="bg-green-500 text-white py-2 px-4 rounded-md">Accept</button>
                 <button id="reject-call" class="bg-red-500 text-white py-2 px-4 rounded-md ml-2">Reject</button>
             </div>
@@ -244,7 +244,7 @@
                 class="text-zinc-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 text-center nobody">
                 Welcome to the Chat Connect!<br>
                 Please wait while we connect you with a partner.<br>
-                If you are not connected within a minute, we will start an AI chat for you.
+                If you are not connected within 15 seconds, we will start an AI chat for you in 15 seconds.
                </div>
         </main>
         <style>
@@ -624,7 +624,9 @@
 
             socket.on("incomingCall", function () {
                 console.log("hey");
+                 startRingtone();
                 document.querySelector("#incoming-call").classList.remove("hidden");
+               
             })
 
             socket.on("callAccepted", function () {
@@ -639,13 +641,15 @@
                     document.querySelector("#incoming-call").classList.add("hidden");
                     initialize();
                     document.querySelector(".videoblock").style.display = "flex";
-                    socket.emit("acceptCall", { room })
+                    socket.emit("acceptCall", { room });
+                    stopRingtone();
                 })
 
             document.querySelector("#reject-call")
                 .addEventListener("click", function () {
                     document.querySelector("#incoming-call").classList.add("hidden");
                     socket.emit("rejectCall", { room })
+                    stopRingtone();
                 })
 
             socket.on("callRejected", function () {
@@ -717,7 +721,25 @@
                 window.location.href = "/error"; // Change "/error" to your actual error page URL
             } -->
         </script>
+  <script>
+    let ringtoneAudio;
 
+function startRingtone() {
+    if (!ringtoneAudio) {
+        ringtoneAudio = new Audio("/music/ringtone.mp3"); // path to your ringtone file
+        console.log("line 729 working")
+        ringtoneAudio.loop = true; // so it keeps ringing
+    }
+    ringtoneAudio.play().catch(err => console.error("Audio play failed:", err));
+}
+
+function stopRingtone() {
+    if (ringtoneAudio) {
+        ringtoneAudio.pause();
+        ringtoneAudio.currentTime = 0; // reset to start
+    }
+}
+  </script>
 </body>
 
 </html>

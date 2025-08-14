@@ -137,10 +137,13 @@ io.on("connection", (socket) => {
 
    
     try {
-      // if (typeof sendEmail === "function") {
-        // sendEmail(socket.userName);
-        console.log("Sent notification email (sendEmail called).");
-      // }
+      var temp= socket.userName || "Anonymous";
+       async function callSendEmail(username){
+        console.log("Sending email to:", username);
+        await sendEmail(username);
+       }
+       callSendEmail(temp);
+       console.log("Sent notification email (sendEmail called). line 146");
     } catch (e) {
       console.warn("Failed to call sendEmail:", e.message || e);
     }
@@ -155,7 +158,7 @@ io.on("connection", (socket) => {
         pairedUsers.set(socket.id, "AI");
         aiSessions.set(socket.id, { startedAt: Date.now() });
       }
-    }, 15000);
+    }, 10000);
   });
 
 
