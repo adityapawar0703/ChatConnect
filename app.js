@@ -158,7 +158,7 @@ io.on("connection", (socket) => {
         pairedUsers.set(socket.id, "AI");
         aiSessions.set(socket.id, { startedAt: Date.now() });
       }
-    }, 10000);
+    }, 6000);
   });
 
 
