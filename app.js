@@ -136,17 +136,17 @@ io.on("connection", (socket) => {
     waitingusers.push(socket);
 
    
-    try {
-      var temp= socket.userName || "Anonymous";
-       async function callSendEmail(username){
-        console.log("Sending email to:", username);
-        await sendEmail(username);
-       }
-       callSendEmail(temp);
-       console.log("Sent notification email (sendEmail called). line 146");
-    } catch (e) {
-      console.warn("Failed to call sendEmail:", e.message || e);
-    }
+    // try {
+    //   var temp= socket.userName || "Anonymous";
+    //    async function callSendEmail(username){
+    //     console.log("Sending email to:", username);
+    //     // await sendEmail(username);
+    //    }
+    //    callSendEmail(temp);
+    //    console.log("Sent notification email (sendEmail called). line 146");
+    // } catch (e) {
+    //   console.warn("Failed to call sendEmail:", e.message || e);
+    // }
 
     
     setTimeout(() => {
